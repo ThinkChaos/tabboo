@@ -40,14 +40,22 @@ let currentTabs = [];
   });
 
 
-function openSession(){
+function openSession(event){
   const tabs = Array(... document.querySelectorAll('.tab'));
 
   const urls = tabs.map(tab => {
       return tab.childNodes[5].childNodes[3].textContent.trim();
   });
 
-  browser.windows.create({url: urls});
+  if (event.metaKey) {
+    // Meta pressed: open in current window as tabs
+    urls.forEach(url => {
+      browser.tabs.create({url: url});
+    })
+  }
+  else {
+    browser.windows.create({url: urls});
+  }
 }
 
 
